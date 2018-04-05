@@ -267,7 +267,7 @@ public class GZoltarFaultLocalization implements FaultLocalizationStrategy {
 		return new FaultLocalizationResult(candidates, failingTestCases);
 	}
 
-	private boolean isSource(String compName, String srcFolder) {
+	protected boolean isSource(String compName, String srcFolder) {
 		String clRoot = compName.split("\\$")[0];
 		String[] segmentationName = clRoot.split("\\.");
 		String simpleClassName = segmentationName[segmentationName.length - 1];
