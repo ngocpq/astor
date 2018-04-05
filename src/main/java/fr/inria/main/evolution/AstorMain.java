@@ -14,6 +14,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
+import fr.inria.astor.approaches.adqfix.AdqFixRepairEngine;
 import fr.inria.astor.approaches.cardumen.CardumenApproach;
 import fr.inria.astor.approaches.deepRepepair.DeepRepairEngine;
 import fr.inria.astor.approaches.exhaustive.ExhaustiveIngredientBasedEngine;
@@ -93,7 +94,8 @@ public class AstorMain extends AbstractMain {
 
 		} else if (ExecutionMode.EXASTOR.equals(mode)) {
 			astorCore = new ExhaustiveIngredientBasedEngine(mutSupporter, projectFacade);
-
+		} else if (ExecutionMode.AdqFixRepair.equals(mode)) {
+			astorCore = new AdqFixRepairEngine(mutSupporter, projectFacade);
 		} else {
 			// If the execution mode is any of the predefined, Astor
 			// interpretes as

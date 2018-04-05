@@ -6,5 +6,5 @@ package fr.inria.main;
  *
  */
 public enum ExecutionMode {
-	DeepRepair, CARDUMEN, jGenProg, jKali, MutRepair, EXASTOR, custom
+	DeepRepair, CARDUMEN, jGenProg, jKali, MutRepair, EXASTOR,AdqFixRepair, custom
 }
