@@ -1,5 +1,6 @@
 package fr.inria.astor.core.loop.population;
 
+import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.entities.TestCaseVariantValidationResult;
 import fr.inria.astor.core.entities.VariantValidationResult;
 
@@ -15,7 +16,7 @@ public class TestCaseFitnessFunction implements FitnessFunction {
 	 * In this case the fitness value is associate to the failures: LESS FITNESS
 	 * is better.
 	 */
-	public double calculateFitnessValue(VariantValidationResult validationResult) {
+	public double calculateFitnessValue(VariantValidationResult validationResult, ProgramVariant originalVariant) {
 
 		if (validationResult == null)
 			return this.getWorstMaxFitnessValue();
