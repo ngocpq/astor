@@ -1,0 +1,22 @@
+{
+    "FailingTestCase": "10", 
+    "FailingTestCaseExecution": "209", 
+    "InmutatedGen": "14", 
+    "NotAppliedOp": "0", 
+    "OfAppliedOp": "440", 
+    "RegressionTestCases": "0", 
+    "RegressionTestExecution": "0", 
+    "RightCompilation": "208", 
+    "WrongCompilation": "232", 
+    "date": "Thu Apr 12 23:23:14 KST 2018\n\n", 
+    "gen": "440", 
+    "gens": "1026", 
+    "node": "ubuntu", 
+    "operations": [], 
+    "ops": "0", 
+    "patches": "0", 
+    "programVariant": null, 
+    "timeEvaluation": "5093121", 
+    "timeTotal": "5207723", 
+    "unfinishValidation": "0"
+}
