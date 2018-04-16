@@ -20,6 +20,7 @@ public class AdqFixRepairPlugInloader extends jGenProgPlugInLoader {
 	protected void loadFaultLocalization(AstorCoreEngine approach) throws Exception {
 		// Fault localization
 		String flvalue = ConfigurationProperties.getProperty("faultlocalization").toLowerCase();
-		approach.setFaultLocalization(new CoverageInfoCached_GZoltarFaultLocalization());		
+		approach.setFaultLocalization(new CoverageInfoCached_GZoltarFaultLocalization());
+		//super.loadFaultLocalization(approach);
 	}
 }

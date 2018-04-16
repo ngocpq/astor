@@ -2,7 +2,7 @@ package fr.inria.astor.approaches.adqfix.mhs.model;
 
 import java.util.List;
 
-public interface IMatrix <T>{
+public interface IMatrix<T>{
 	public T get(int row,int col);	
 	public void set(int row,int col, T value);
 	
