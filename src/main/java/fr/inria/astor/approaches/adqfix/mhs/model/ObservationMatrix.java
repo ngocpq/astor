@@ -30,13 +30,11 @@ public class ObservationMatrix<CompType> extends MatrixBase<Integer> implements 
 		dirty=false;
 	}
 	
-	public ObservationMatrix(int row,int col){
-		super(row,col,null);		
-		int N=row;
-		int M=col;			
-		componentIDs = new ArrayList<CompType>(col);				
-		for(int i=0;i<M;i++)
-			componentIDs.add(null); //TODO:
+	public ObservationMatrix(int numTestCase,List<CompType> components){
+		super(numTestCase,components==null?0:components.size(),0);		
+		int N=numTestCase;
+		int M=components.size();			
+		componentIDs = new ArrayList<CompType>(components);						
 		
 		errorVector = new ArrayList<Integer>(N);
 		n11= new ArrayList<Integer>(M);
@@ -135,6 +133,7 @@ public class ObservationMatrix<CompType> extends MatrixBase<Integer> implements 
 	@Override
 	public void removeCol(int index) {
 		super.removeCol(index);
+		this.componentIDs.remove(index);
 		n11.remove(index);
 		n10.remove(index);
 		n01.remove(index);
@@ -194,8 +193,8 @@ public class ObservationMatrix<CompType> extends MatrixBase<Integer> implements 
 		return score.get(col);
 	}
 
-	public IObservationMatrix copy() {
-		return new ObservationMatrix(this);				
+	public IObservationMatrix<CompType> copy() {
+		return new ObservationMatrix<CompType>(this);				
 	}	
 	
 	@Override

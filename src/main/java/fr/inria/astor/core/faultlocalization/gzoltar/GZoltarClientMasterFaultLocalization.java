@@ -23,6 +23,7 @@ import fr.inria.astor.core.faultlocalization.FaultLocalizationResult;
 import fr.inria.astor.core.faultlocalization.entity.SuspiciousCode;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.setup.ConfigurationProperties;
+import spoon.reflect.declaration.CtType;
 
 /**
  * GZoltar using Client Master Architecture
@@ -48,10 +49,12 @@ public class GZoltarClientMasterFaultLocalization extends GZoltarFaultLocalizati
 
 		String targetClasses = ConfigurationProperties.getProperty("classestoinstrument");
 
-		if (targetClasses == null || targetClasses.trim().isEmpty())
-			targetClasses = MutationSupporter.currentSupporter.getFactory().Type().getAll().stream()
+		if (targetClasses == null || targetClasses.trim().isEmpty()){
+			List<CtType<?>> lst = MutationSupporter.currentSupporter.getFactory().Type().getAll();
+			targetClasses = lst.stream()
 					.map(t -> t.getQualifiedName()).collect(Collectors.joining(File.pathSeparator));
-
+		}
+		
 		String testNames = testsToExecute.stream().collect(Collectors.joining(File.pathSeparator));
 		logger.debug("#test before: " + testsToExecute.size() + " #after " + tcset.size());
 		logger.debug("#Target classes: " + MutationSupporter.currentSupporter.getFactory().Type().getAll().size());
@@ -215,6 +218,7 @@ public class GZoltarClientMasterFaultLocalization extends GZoltarFaultLocalizati
 
 		List<SuspiciousCode> codes = new ArrayList<>();
 		List<String> failingTestCases = new ArrayList<>();
+		List<Integer> failingTestCasesID = new ArrayList<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(spectrapath))) {
 
 			String line;
@@ -233,15 +237,18 @@ public class GZoltarClientMasterFaultLocalization extends GZoltarFaultLocalizati
 		try (BufferedReader br = new BufferedReader(new FileReader(testpath))) {
 
 			String line;
+			int tcId = 0;
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
 				String[] lineS = line.split(",");
 				if (lineS[1].equals("FAIL")) {
 					String name = lineS[0].split("#")[0];
-					if (!failingTestCases.contains(name))
+					if (!failingTestCases.contains(name)){
 						failingTestCases.add(name);
+						failingTestCasesID.add(tcId);
+					}
 				}
-
+				tcId++;
 			}
 
 		} catch (IOException e) {
@@ -251,7 +258,7 @@ public class GZoltarClientMasterFaultLocalization extends GZoltarFaultLocalizati
 		///
 
 		codes.forEach(e -> logger.debug(e));
-		failingTestCases.forEach(e -> logger.debug(e));
+		failingTestCases.forEach(e -> logger.debug(e));		
 		FaultLocalizationResult result = new FaultLocalizationResult(codes, failingTestCases);
 
 		return result;

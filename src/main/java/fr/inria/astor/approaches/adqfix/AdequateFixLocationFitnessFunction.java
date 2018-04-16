@@ -1,5 +1,6 @@
 package fr.inria.astor.approaches.adqfix;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.inria.astor.approaches.adqfix.model.MinimalCorrectionLocationSet;
@@ -35,7 +36,20 @@ public class AdequateFixLocationFitnessFunction extends TestCaseFitnessFunction{
 	
 	public double computeAdequateModificationScore(ProgramVariant variant){
 		//Get modification points
-		List<OperatorInstance> operations = variant.getOperations(variant.getLastModificationPointAnalyzed());
+		//List<OperatorInstance> operations = variant.getOperations(variant.getLastModificationPointAnalyzed());
+		
+		List<OperatorInstance> operations = new ArrayList<>();
+		for(int i= variant.getLastModificationPointAnalyzed();i<variant.getGenerationSource();i++){
+			List<OperatorInstance> lst = variant.getOperations(i);
+			if (lst!=null)
+				operations.addAll(lst);
+		}
+		
+		if (operations.isEmpty())
+			return 0;
+		if (this.fixLocator==null)
+			return 0;
+		
 		for(OperatorInstance opInstance:operations){
 			AstorOperator astorOp = opInstance.getOperationApplied();
 			if (astorOp instanceof InsertAfterOp ){

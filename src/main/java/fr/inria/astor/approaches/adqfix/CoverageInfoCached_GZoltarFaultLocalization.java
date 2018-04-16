@@ -28,12 +28,18 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 	static Logger logger = Logger.getLogger(CoverageInfoCached_GZoltarFaultLocalization.class.getName());
 
-	IObservationMatrix observationMatrix ;
+	//IObservationMatrix observationMatrix ;
+	Map<String, Integer> mapfailingTestIndex ;
+	public Map<String, Integer> getTestCaseIdMapping(){
+		return this.mapfailingTestIndex;
+	}
+	
 	protected FaultLocalizationResult searchSuspicious(String locationBytecode, List<String> testsToExecute,
 			List<String> toInstrument, Set<String> cp, String srcFolder) throws Exception {
 
 		List<String> failingTestCases = new ArrayList<String>();
-
+		List<Integer> failingTestCasesID = new ArrayList<Integer>();
+		
 		Double thr = ConfigurationProperties.getPropertyDouble("flthreshold");
 		logger.info("Gzoltar fault localization: min susp value parameter: " + thr);
 		// 1. Instantiate GZoltar
@@ -84,9 +90,9 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 		gz.run();
 		int[] sum = new int[2];
-		Map<String, TestResult> mapfailingTestResults = new HashMap<>();
-		
-		for (TestResult tr : gz.getTestResults()) {
+		mapfailingTestIndex = new HashMap<>();
+		int testidex = 0;
+		for (TestResult tr : gz.getTestResults()) {			
 			String testName = tr.getName().split("#")[0];
 			if (testName.startsWith("junit")) {
 				continue;
@@ -98,10 +104,13 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 				String testCaseName = testName.split("\\#")[0];
 				if (!failingTestCases.contains(testCaseName)) {
-					failingTestCases.add(testCaseName);					
-					mapfailingTestResults.put(testCaseName, tr);
+					failingTestCases.add(testCaseName);			
+					failingTestCasesID.add(testidex);
+					
+					mapfailingTestIndex.put(testCaseName, testidex);					
 				}
 			}
+			testidex++;
 		}
 
 		int gzPositives = gz.getSuspiciousStatements().stream().filter(x -> x.getSuspiciousness() > 0)
@@ -159,29 +168,25 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 		// ----------- init observationMatrix -----------
 		
-		IObservationMatrix<SuspiciousCode> matrix = new  ObservationMatrix<SuspiciousCode>(candidates.size(),failingTestCases.size());
+		/*IObservationMatrix<SuspiciousCode> matrix = new  ObservationMatrix<SuspiciousCode>(candidates.size(),failingTestCases.size());
 		for (int i = 0; i < candidates.size(); i++) {
 			SuspiciousCode stmt = candidates.get(i);
+			//matrix.addColumn(colIndex, initValue);
 			for (int j = 0; j < failingTestCases.size(); j++) {
 				String tc = failingTestCases.get(j);
 				TestResult result = mapfailingTestResults.get(tc);
-				//TODO:
-				/*List<ComponentCount> component = result.get
-				for (ComponentCount compCount:component){
-					compCount.getComponent()
-				}*/
-					
-				int isCover = stmt.getCoverage().getOrDefault(j, 0);
+				Integer tcIndex = mapfailingTestIndex.get(tc);
+				
+				int isCover = stmt.getCoverage().getOrDefault(tcIndex, 0);
 				if (isCover>0)
 					matrix.setHit(i, j, 1);
 				else
 					matrix.setHit(i, j, 0);
 			}
-
 			matrix.setErrorTrace(i, 1);			
 		}
 		
-		this.observationMatrix = matrix;
+		this.observationMatrix = matrix;*/
 		// ----------------------------------------------
 		return new FaultLocalizationResult(candidates, failingTestCases);
 	}

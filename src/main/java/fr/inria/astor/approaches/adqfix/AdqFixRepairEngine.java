@@ -17,17 +17,22 @@ public class AdqFixRepairEngine extends JGenProg{
 	
 	public AdqFixRepairEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
 		super(mutatorExecutor, projFacade);
-		this.pluginLoaded = new AdqFixRepairPlugInloader();
-		
-		adequateFixLocationStrategy = new MinimalHittingSetAdequateFixLocalization();				
+		this.pluginLoaded = new AdqFixRepairPlugInloader();						
 	}
 	
 
 	@Override
 	public void initPopulation(List<SuspiciousCode> suspicious) throws Exception {
-		// TODO Auto-generated method stub
+		
+		CoverageInfoCached_GZoltarFaultLocalization ffl = (CoverageInfoCached_GZoltarFaultLocalization)this.getFaultLocalization();
+		AdequateFixLocationFitnessFunction fitnessFunc = (AdequateFixLocationFitnessFunction)this.getFitnessFunction();
+		
+		adequateFixLocationStrategy = new MinimalHittingSetAdequateFixLocalization(ffl.getTestCaseIdMapping());		
+		
+		adequateFixLocationStrategy.initAdequateFixLocationStrategy(suspicious,this.getProjectFacade().getProperties().getFailingTestCases());
+		
+		fitnessFunc.setAdequateFixLocationChecker(adequateFixLocationStrategy);
+		
 		super.initPopulation(suspicious);
-		this.setFitnessFunction(fitnessFunction);
-		adequateFixLocationStrategy.setSuspiciousCode(suspicious);
 	}
 }

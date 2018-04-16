@@ -22,7 +22,7 @@ public class StaccatoAlgorithm {
 	public static <CompType> DiagnosisSet<CompType> Staccato(IObservationMatrix<CompType> a, double lamda, int L){
 		Long time = System.nanoTime();
 		getLogger().debug("Staccato "+time+" begin: ( ["+a.rowCount()+","+a.colCount()+"], "+a.colCount()+", "+lamda+", "+L+")");
-		getLogger().debug(a.toString());
+		//getLogger().debug(a.toString());
 		//collection conflict sets
 		List<Integer> TF = new ArrayList<Integer>();
 		for(int i=0;i<a.rowCount();i++)
@@ -39,23 +39,23 @@ public class StaccatoAlgorithm {
 			if (a.getN11(i)==TF.size()){
 				CompType compID = a.getComponentIDAt(i);
 				Diagnosis<CompType> d =  new Diagnosis(compID);
-				getLogger().debug("time "+time+" diagnoses add: "+d);
+				//getLogger().debug("time "+time+" diagnoses add: "+d);
 				diagnoses.add(d);				
 				//strip component j
 				a.removeCol(i);
 				i--;
-				getLogger().debug("remove col: "+compID);
+				//getLogger().debug("remove col: "+compID);
 				//remove i from rank
 				rank.remove(compID);				
 				seen=seen+ 1.0/a.colCount();
 			}
 		}
-		getLogger().debug("time "+time+" matrix after remove 1: ");
-		getLogger().debug(a.toString());
+		//getLogger().debug("time "+time+" matrix after remove 1: ");
+		//getLogger().debug(a.toString());
 		//
 		while(rank.size()>0 && seen <= lamda && diagnoses.size()<=L){
 			CompType compID = rank.get(0);
-			getLogger().debug("time "+time+": top component: "+compID);
+			//getLogger().debug("time "+time+": top component: "+compID);
 			rank.remove(0);			
 			seen = seen +1.0/a.colCount();			
 			IObservationMatrix<CompType> a2 = Strip(a, a.getComponentIndex(compID));			
