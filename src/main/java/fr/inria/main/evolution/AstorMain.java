@@ -182,7 +182,9 @@ public class AstorMain extends AbstractMain {
 			astorCore = createEngine(ExecutionMode.custom);
 		else if ("exhaustive".equals(mode) || "exastor".equals(mode))
 			astorCore = createEngine(ExecutionMode.EXASTOR);
-		else {
+		else if ("adqfix".equals(mode) || "exastor".equals(mode)){
+			astorCore = createEngine(ExecutionMode.AdqFixRepair);
+		} else {
 			System.err.println("Unknown mode of execution: '" + mode + "',  modes are: "
 					+ Arrays.toString(ExecutionMode.values()));
 			return;

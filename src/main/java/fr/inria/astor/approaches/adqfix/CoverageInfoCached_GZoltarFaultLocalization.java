@@ -4,7 +4,9 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,8 +14,11 @@ import org.apache.log4j.Logger;
 
 import com.gzoltar.core.GZoltar;
 import com.gzoltar.core.components.Statement;
+import com.gzoltar.core.components.count.ComponentCount;
 import com.gzoltar.core.instr.testing.TestResult;
 
+import fr.inria.astor.approaches.adqfix.mhs.model.IObservationMatrix;
+import fr.inria.astor.approaches.adqfix.mhs.model.ObservationMatrix;
 import fr.inria.astor.core.faultlocalization.FaultLocalizationResult;
 import fr.inria.astor.core.faultlocalization.entity.SuspiciousCode;
 import fr.inria.astor.core.faultlocalization.gzoltar.GZoltarFaultLocalization;
@@ -23,6 +28,7 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 	static Logger logger = Logger.getLogger(CoverageInfoCached_GZoltarFaultLocalization.class.getName());
 
+	IObservationMatrix observationMatrix ;
 	protected FaultLocalizationResult searchSuspicious(String locationBytecode, List<String> testsToExecute,
 			List<String> toInstrument, Set<String> cp, String srcFolder) throws Exception {
 
@@ -78,6 +84,8 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 		gz.run();
 		int[] sum = new int[2];
+		Map<String, TestResult> mapfailingTestResults = new HashMap<>();
+		
 		for (TestResult tr : gz.getTestResults()) {
 			String testName = tr.getName().split("#")[0];
 			if (testName.startsWith("junit")) {
@@ -90,7 +98,8 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 				String testCaseName = testName.split("\\#")[0];
 				if (!failingTestCases.contains(testCaseName)) {
-					failingTestCases.add(testCaseName);
+					failingTestCases.add(testCaseName);					
+					mapfailingTestResults.put(testCaseName, tr);
 				}
 			}
 		}
@@ -148,6 +157,32 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 
 		logger.info("Gzoltar found: " + candidates.size() + " with susp > " + thr + ", we consider: " + max);
 
+		// ----------- init observationMatrix -----------
+		
+		IObservationMatrix<SuspiciousCode> matrix = new  ObservationMatrix<SuspiciousCode>(candidates.size(),failingTestCases.size());
+		for (int i = 0; i < candidates.size(); i++) {
+			SuspiciousCode stmt = candidates.get(i);
+			for (int j = 0; j < failingTestCases.size(); j++) {
+				String tc = failingTestCases.get(j);
+				TestResult result = mapfailingTestResults.get(tc);
+				//TODO:
+				/*List<ComponentCount> component = result.get
+				for (ComponentCount compCount:component){
+					compCount.getComponent()
+				}*/
+					
+				int isCover = stmt.getCoverage().getOrDefault(j, 0);
+				if (isCover>0)
+					matrix.setHit(i, j, 1);
+				else
+					matrix.setHit(i, j, 0);
+			}
+
+			matrix.setErrorTrace(i, 1);			
+		}
+		
+		this.observationMatrix = matrix;
+		// ----------------------------------------------
 		return new FaultLocalizationResult(candidates, failingTestCases);
 	}
 
