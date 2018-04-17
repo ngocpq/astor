@@ -10,7 +10,6 @@ import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.entities.TestCaseVariantValidationResult;
 import fr.inria.astor.core.loop.population.PopulationConformation;
 import fr.inria.astor.core.setup.ConfigurationProperties;
-import fr.inria.astor.util.CommandSummary;
 import fr.inria.main.evolution.AstorMain;
 
 /**
@@ -237,11 +236,11 @@ public class AdqFixTest {
 		File out = new File(ConfigurationProperties.getProperty("workingDirectory"));
 		int generations = 50;
 		String[] args = commandMath70(dep, out, generations);
-		CommandSummary cs = new CommandSummary(args);
-		cs.command.put("-stopfirst", "true");
+		//CommandSummary cs = new CommandSummary(args);
+		//cs.command.put("-stopfirst", "true");
 
-		System.out.println(Arrays.toString(cs.flat()));
-		main1.execute(cs.flat());
+		//System.out.println(Arrays.toString(cs.flat()));
+		main1.execute(args);
 
 		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
 		ProgramVariant variant = solutions.get(0);
@@ -265,20 +264,30 @@ public class AdqFixTest {
 				out.getAbsolutePath(),
 				//
 				"-scope", "package", "-seed", "10", "-maxgen", "1000", "-stopfirst", "false", "-maxtime", "10",
-				"-population", "1", "-reintroduce", PopulationConformation.PARENTS.toString()
-
+				"-population", "1", "-reintroduce", PopulationConformation.PARENTS.toString(),
+				
+				"-parameters", "maxnumbersolutions:2" // <-- 2
 		};
 		System.out.println(Arrays.toString(args));
-		CommandSummary command = new CommandSummary(args);
 
-		command.command.put("-parameters", "maxnumbersolutions:2");
-		main1.execute(command.flat());
+		main1.execute(args);
 
 		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
 		System.out.println("found 2 solution: "+solutions.size());
 
-		command.command.put("-parameters", "maxnumbersolutions:1");
-		main1.execute(command.flat());
+		 args = new String[] { "-dependencies", dep, "-mode", "adqfix", "-failing",
+					"org.apache.commons.math.analysis.solvers.BisectionSolverTest", "-location",
+					new File("./examples/math_70").getAbsolutePath(), "-package", "org.apache.commons", "-srcjavafolder",
+					"/src/java/", "-srctestfolder", "/src/test/", "-binjavafolder", "/target/classes", "-bintestfolder",
+					"/target/test-classes", "-javacompliancelevel", "7", "-flthreshold", "0.5", "-out",
+					out.getAbsolutePath(),
+					//
+					"-scope", "package", "-seed", "10", "-maxgen", "1000", "-stopfirst", "false", "-maxtime", "10",
+					"-population", "1", "-reintroduce", PopulationConformation.PARENTS.toString(),
+					
+					"-parameters", "maxnumbersolutions:1" // <-- 1
+			};
+		main1.execute(args);
 
 		solutions = main1.getEngine().getSolutions();
 		System.out.println("Found 1 solution: "+solutions.size());
