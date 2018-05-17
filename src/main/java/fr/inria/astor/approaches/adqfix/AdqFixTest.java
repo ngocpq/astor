@@ -118,7 +118,8 @@ public class AdqFixTest {
 		File out = new File(ConfigurationProperties.getProperty("workingDirectory"));
 		String[] args = new String[] { "-dependencies", dep, 
 				"-mode", "adqfix",
-//				"-mode", "statement", 
+//				"-mode", "statement",
+				"-population", "5",
 				"-failing", "org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest", "-location",
 				new File("./examples/math_50").getAbsolutePath(), "-package", "org.apache.commons", "-srcjavafolder",
 				"/src/main/java/", "-srctestfolder", "/src/test/java", "-binjavafolder", "/target/classes",

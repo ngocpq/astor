@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import fr.inria.astor.approaches.adqfix.mhs.model.Diagnosis;
-import fr.inria.astor.approaches.adqfix.mhs.model.DiagnosisSet;
+import fr.inria.astor.approaches.adqfix.mhs.model.MinimalHittingSet;
+import fr.inria.astor.approaches.adqfix.model.DiagnosisSet;
 import fr.inria.astor.approaches.adqfix.mhs.model.IObservationMatrix;
 
 
@@ -38,7 +38,7 @@ public class StaccatoAlgorithm {
 		for(int i=0;i<a.colCount();i++){
 			if (a.getN11(i)==TF.size()){
 				CompType compID = a.getComponentIDAt(i);
-				Diagnosis<CompType> d =  new Diagnosis(compID);
+				MinimalHittingSet<CompType> d =  new MinimalHittingSet(compID);
 				//getLogger().debug("time "+time+" diagnoses add: "+d);
 				diagnoses.add(d);				
 				//strip component j
@@ -62,7 +62,7 @@ public class StaccatoAlgorithm {
 			DiagnosisSet<CompType> diagnosisSet2 = Staccato(a2,lamda,L);
 			//check subsumed
 			while (diagnosisSet2.size()>0){
-				Diagnosis<CompType> di = diagnosisSet2.pop();				
+				MinimalHittingSet<CompType> di = (MinimalHittingSet<CompType>) diagnosisSet2.pop();				
 				di.addComponent(compID);				
 				if (diagnoses.checkSubsume(di)==false)
 					diagnoses.add(di);

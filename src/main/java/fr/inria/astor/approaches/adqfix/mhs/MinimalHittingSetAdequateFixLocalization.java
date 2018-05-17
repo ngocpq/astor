@@ -1,26 +1,22 @@
 package fr.inria.astor.approaches.adqfix.mhs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import fr.inria.astor.approaches.adqfix.AdequateFixLocationStrategy;
-import fr.inria.astor.approaches.adqfix.mhs.model.Diagnosis;
-import fr.inria.astor.approaches.adqfix.mhs.model.DiagnosisSet;
 import fr.inria.astor.approaches.adqfix.mhs.model.IObservationMatrix;
 import fr.inria.astor.approaches.adqfix.mhs.model.ObservationMatrix;
-import fr.inria.astor.approaches.adqfix.model.MinimalCorrectionLocationSet;
+import fr.inria.astor.approaches.adqfix.model.Diagnosis;
+import fr.inria.astor.approaches.adqfix.model.DiagnosisSet;
 import fr.inria.astor.core.faultlocalization.entity.SuspiciousCode;
-import fr.inria.astor.core.setup.ProjectRepairFacade;
 
-public class MinimalHittingSetAdequateFixLocalization implements AdequateFixLocationStrategy {
+public class MinimalHittingSetAdequateFixLocalization implements AdequateFixLocationStrategy<SuspiciousCode> {
 
 	private List<SuspiciousCode> suspicious;
 	
 
-	List<MinimalCorrectionLocationSet> allMCSes;
+	//List<MinimalCorrectionLocationSet> allMCSes;
+	DiagnosisSet<SuspiciousCode> diagnosisSet;
 	
 	int lamda = 1;
 	int mcsSizeMax = 3;
@@ -56,19 +52,26 @@ public class MinimalHittingSetAdequateFixLocalization implements AdequateFixLoca
 			matrix.setErrorTrace(i, IObservationMatrix.RESULT_FAILED);
 		}
 		//compute Minimal hitting set		
-		DiagnosisSet<SuspiciousCode> result = StaccatoAlgorithm.Staccato(matrix, lamda, mcsSizeMax);
+		diagnosisSet = StaccatoAlgorithm.Staccato(matrix, lamda, mcsSizeMax);
 		//this.allMCSes = StaccatoAlgorithm.Staccato(a, lamda, L);				
-		this.allMCSes = new ArrayList<>();
-		for(Diagnosis<SuspiciousCode> diagnosis:result.getCandidateList()){
-			MinimalCorrectionLocationSet mcs = new MinimalCorrectionLocationSet(diagnosis.getComponentIdList());
-			this.allMCSes.add(mcs);
-		}
+//		this.allMCSes = new ArrayList<>();
+//		for(Diagnosis<SuspiciousCode> diagnosis:result.getCandidateList()){
+//			MinimalCorrectionLocationSet mcs = new MinimalCorrectionLocationSet(diagnosis.getComponentIdList());
+//			this.allMCSes.add(mcs);
+//		}
 	}
 
 	@Override
-	public List<MinimalCorrectionLocationSet> getAllAdequateFixes() {
-		return this.allMCSes;
+	public List<Diagnosis<SuspiciousCode>> getAllAdequateFixes() {
+		return this.diagnosisSet.getCandidateList();
 	}
+
+	@Override
+	public DiagnosisSet<SuspiciousCode> getDiagnosisSet() {
+		return this.diagnosisSet;
+	}
+	
+	
 
 	
 }

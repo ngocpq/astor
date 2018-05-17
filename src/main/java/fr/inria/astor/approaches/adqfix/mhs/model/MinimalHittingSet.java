@@ -3,11 +3,14 @@ package fr.inria.astor.approaches.adqfix.mhs.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiagnosisCandidateBase <T> {
+import fr.inria.astor.approaches.adqfix.model.Diagnosis;
+import fr.inria.astor.approaches.adqfix.model.Diagnosis.SubsumeCheck;
+
+public class MinimalHittingSet <T> implements Diagnosis<T>{
 	protected List<T> componentIDs;
 	protected double health;
 	
-	public DiagnosisCandidateBase(T ... componentsID)
+	public MinimalHittingSet(T ... componentsID)
 	{
 		componentIDs = new ArrayList<T>();
 		for(T cID:componentsID)
@@ -15,7 +18,7 @@ public class DiagnosisCandidateBase <T> {
 		health = -1;
 	}
 	
-	public DiagnosisCandidateBase()
+	public MinimalHittingSet()
 	{
 		componentIDs = new ArrayList<T>();
 		health = -1;
@@ -44,20 +47,32 @@ public class DiagnosisCandidateBase <T> {
 	}
 
 
-	public boolean isSubsumed(DiagnosisCandidateBase<T> di) {
-		DiagnosisCandidateBase<T> large,small;
+	public SubsumeCheck checkSubsume(List<T> di){
+		SubsumeCheck result;
+		List<T> large,small;
 		if (di.size()>this.size()){
 			large=di;
-			small=this;
+			small=this.getComponentIdList();
+			result = SubsumeCheck.UNDER;
 		}else{
-			large=this;
+			large=this.getComponentIdList();
 			small=di;
+			result = SubsumeCheck.OVER;
 		}			
-		for(T compID:small.getComponentIdList()){
-			if (!large.contain(compID))					
-				return false;
+		for(T compID:small){
+			boolean contain = false;
+			for(T i:large){
+				if (i.equals(compID)){
+					contain = true;
+					break;
+				}					
+			}
+			if (!contain)					
+				return SubsumeCheck.UNSUBSUMED;
 		}
-		return true;
+		if (this.size()==di.size())
+			result = SubsumeCheck.EQUAL;
+		return result;
 	}
 
 	public int size() {

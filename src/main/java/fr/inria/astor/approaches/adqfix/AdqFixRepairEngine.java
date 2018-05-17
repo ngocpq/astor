@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.martiansoftware.jsap.JSAPException;
 
+import fr.inria.astor.approaches.adqfix.loop.AdequateChangeBasedFitnessPopulationController;
 import fr.inria.astor.approaches.adqfix.mhs.MinimalHittingSetAdequateFixLocalization;
 import fr.inria.astor.approaches.jgenprog.JGenProg;
 import fr.inria.astor.core.faultlocalization.entity.SuspiciousCode;
@@ -32,6 +33,10 @@ public class AdqFixRepairEngine extends JGenProg{
 		adequateFixLocationStrategy.initAdequateFixLocationStrategy(suspicious,this.getProjectFacade().getProperties().getFailingTestCases());
 		
 		fitnessFunc.setAdequateFixLocationChecker(adequateFixLocationStrategy);
+		
+		if (this.getPopulationControler() instanceof AdequateChangeBasedFitnessPopulationController){
+			((AdequateChangeBasedFitnessPopulationController)this.getPopulationControler()).setAdequateFixLocationChecker(adequateFixLocationStrategy);
+		}
 		
 		super.initPopulation(suspicious);
 	}
