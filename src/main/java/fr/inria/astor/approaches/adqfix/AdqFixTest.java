@@ -30,9 +30,154 @@ public class AdqFixTest {
 	public static void main(String[] args) throws Exception {
 		AdqFixTest app = new AdqFixTest();
 		//app.testMath85();
-		app.testMath50Remove();
+		//app.testMath50Remove();
+		//app.testTime_27_AdqFix();
+		app.testChart_15_AdqFix();
+		//app.testChart_15_Genprog();
+		//app.testChart_14_AdqFix();
+		//app.testChart_25_AdqFix();
+		//app.testChart_26_AdqFix();
 	}
 	
+	void testDefects4j(){
+		
+	}
+	
+	void testChart_14_AdqFix() throws Exception{
+		String location = "/tmp/chart_14_AdqFix";
+		String lib = location+"/lib/";
+		String argStr = "-mode  adqfix  -location  "+location
+						+" -dependencies  " + lib
+						//" -failing  org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests: "
+						+" -failing org.jfree.chart.plot.junit.CategoryPlotTests#testRemoveRangeMarker:org.jfree.chart.plot.junit.CategoryPlotTests#testRemoveDomainMarker:org.jfree.chart.plot.junit.XYPlotTests#testRemoveRangeMarker:org.jfree.chart.plot.junit.XYPlotTests#testRemoveDomainMarker: "
+						+" -package org.jfree -jvm4testexecution /usr/lib/jvm/java-8-oracle/bin/ -javacompliancelevel 4 "
+						+" -maxgen 10000 -seed 353 -maxtime 180  "
+						+" -scope package"
+						//+" -scope  file "
+						+" -stopfirst False -flthreshold 0.1 -population 5 -srcjavafolder source/ -srctestfolder tests/ -binjavafolder build/ -bintestfolder build-tests/"
+						//+" -regressionforfaultlocalization False"
+						+ " -loglevel FINE";
+		//argStr += " -testbystep True";
+		
+		AstorMain main1 = new AstorMain();
+		String[] args = argStr.split("\\s+");
+		System.out.println(Arrays.toString(args));
+		main1.execute(args);
+
+		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+		System.out.println("Solution count: "+solutions.size());
+	}
+	
+	void testChart_25_AdqFix() throws Exception{
+		String location = "/tmp/chart_25_AdqFix";
+		String lib = location+"/lib/";
+		String argStr = "-mode  adqfix  -location  "+location
+						+" -dependencies  " + lib
+						//" -failing  org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests: "
+						+" -failing org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests#testDrawWithNullMeanVertical:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests#testDrawWithNullDeviationVertical:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests#testDrawWithNullMeanHorizontal:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests#testDrawWithNullDeviationHorizontal: "
+						+" -package  org.jfree  -jvm4testexecution  /usr/lib/jvm/java-8-oracle/bin/  -javacompliancelevel  4 "
+						+" -maxgen  500  -seed  300  -maxtime  180 "
+						+" -scope  file "
+						+" -stopfirst  True  -flthreshold  0.1  -population  5  -srcjavafolder  source/  -srctestfolder  tests/  -binjavafolder  build/  -bintestfolder  build-tests/ "
+						//+" -regressionforfaultlocalization False"
+						+ " -loglevel INFO";
+		//argStr += " -testbystep True";
+		
+		AstorMain main1 = new AstorMain();
+		String[] args = argStr.split("\\s+");
+		System.out.println(Arrays.toString(args));
+		main1.execute(args);
+
+		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+		System.out.println("Solution count: "+solutions.size());
+	}
+	
+	void testChart_26_AdqFix() throws Exception{
+		String location = "/tmp/chart_26_AdqFix";
+		String lib = location+"/lib/";
+		String argStr = "-mode  adqfix  -location  "+location
+						+" -dependencies  " + lib
+						+" -failing  org.jfree.chart.junit.AreaChartTests#testDrawWithNullInfo:org.jfree.chart.junit.BarChart3DTests#testDrawWithNullInfo:org.jfree.chart.junit.BarChartTests#testDrawWithNullInfo:org.jfree.chart.junit.GanttChartTests#testDrawWithNullInfo:org.jfree.chart.junit.GanttChartTests#testDrawWithNullInfo2:org.jfree.chart.junit.LineChart3DTests#testDrawWithNullInfo:org.jfree.chart.junit.LineChartTests#testDrawWithNullInfo:org.jfree.chart.junit.StackedAreaChartTests#testDrawWithNullInfo:org.jfree.chart.junit.StackedBarChart3DTests#testDrawWithNullInfo:org.jfree.chart.junit.StackedBarChartTests#testDrawWithNullInfo:org.jfree.chart.junit.WaterfallChartTests#testDrawWithNullInfo:org.jfree.chart.plot.junit.CategoryPlotTests#test1654215:org.jfree.chart.plot.junit.CategoryPlotTests#testSerialization3:org.jfree.chart.plot.junit.CategoryPlotTests#testSerialization4:org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests#testDrawWithNullInfo:org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests#testDrawWithNullInfo:org.jfree.chart.renderer.category.junit.IntervalBarRendererTests#testDrawWithNullInfo:org.jfree.chart.renderer.category.junit.LayeredBarRendererTests#testDrawWithNullInfo:org.jfree.chart.renderer.category.junit.LevelRendererTests#testDrawWithNullInfo:org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests#testDrawWithNullInfo:org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests#testDrawWithNullInfo:org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests#testDrawWithNullInfo:"
+						+" -package  org.jfree  -jvm4testexecution  /usr/lib/jvm/java-8-oracle/bin/  -javacompliancelevel  4 "
+						+" -maxgen  10000  -seed  353  -maxtime  180  -scope  package  -stopfirst  False  "
+						+" -flthreshold  0.1  -population  5  -srcjavafolder  source/  -srctestfolder  tests/  -binjavafolder  build/  -bintestfolder  build-tests/ "
+						//+" -regressionforfaultlocalization False"
+						+ " -loglevel INFO";
+		//argStr += " -testbystep True";
+		
+		AstorMain main1 = new AstorMain();
+		String[] args = argStr.split("\\s+");
+		System.out.println(Arrays.toString(args));
+		main1.execute(args);
+
+		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+		System.out.println("Solution count: "+solutions.size());
+	}
+	
+	void testTime_27_AdqFix() throws Exception{
+		String location = "/tmp/time_27_AdqFix";
+		String lib = location+"/lib/";
+		String argStr = "-mode  adqfix "
+						+ " -location  "+location
+						+ " -dependencies  "+lib
+						+ " -failing  org.joda.time.format.TestPeriodFormatterBuilder: "
+						+ "-package  org.joda  -jvm4testexecution  /usr/lib/jvm/java-8-oracle/bin/ "
+						+ " -javacompliancelevel  5 "
+						+ " -maxgen  500 "
+						+ " -seed  300 "
+						+ " -maxtime  180 "
+						+ " -scope  package "
+						+ " -stopfirst  True "
+						+ " -flthreshold  0.1 "
+						+ " -population  10 "
+						+ " -srcjavafolder  src/main/java/ "
+						+ " -srctestfolder  src/test/java/ "
+						+ " -binjavafolder  build/classes/ "
+						+ " -bintestfolder  build/tests/ "
+						+ " -loglevel INFO";
+		//argStr += " -testbystep True";
+		
+		AstorMain main1 = new AstorMain();
+		String[] args = argStr.split("\\s+");
+		System.out.println(Arrays.toString(args));
+		main1.execute(args);
+
+		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+		System.out.println("Solution count: "+solutions.size());
+	}
+	
+	void testChart_15_AdqFix() throws Exception{
+		String location = "/tmp/chart_15_AdqFix";
+		String libDir = location+"/lib/";
+		//String argStr = "-mode  adqfix  -location  "+location+"  -dependencies  lib/  -failing  org.jfree.chart.plot.junit.PiePlot3DTests:  -package  org.jfree  -jvm4testexecution  /usr/lib/jvm/java-8-oracle/bin/  -javacompliancelevel  4  -maxgen  500  -seed  300  -maxtime  180  -scope  package  -stopfirst  True  -flthreshold  0.1  -population  10  -srcjavafolder  source/  -srctestfolder  tests/  -binjavafolder  build/  -bintestfolder  build-tests/";
+		String argStr = "-mode  adqfix  -location   "+location+" -dependencies  "+libDir
+				+"  -failing org.jfree.chart.plot.junit.PiePlot3DTests#testDrawWithNullDataset: "
+				+" -package  org.jfree  -jvm4testexecution  /usr/lib/jvm/java-8-oracle/bin/  -javacompliancelevel  4  -maxgen  500  -seed  300  -maxtime  180  -scope  package  -stopfirst  True  -flthreshold  0.1  -population  10  -srcjavafolder  source/  -srctestfolder  tests/  -binjavafolder  build/  -bintestfolder  build-tests/";
+		argStr+= " -loglevel INFO";		
+		AstorMain main1 = new AstorMain();
+		String[] args = argStr.split("\\s+");
+		System.out.println(Arrays.toString(args));
+		main1.execute(args);
+
+		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+		System.out.println("Solution count: "+solutions.size());
+	}
+	void testChart_15_Genprog() throws Exception{
+		String location = "/tmp/chart_15_Genprog";
+		String libDir = location+"/lib/";
+		//String argStr = "-mode  adqfix  -location  "+location+"  -dependencies  lib/  -failing  org.jfree.chart.plot.junit.PiePlot3DTests:  -package  org.jfree  -jvm4testexecution  /usr/lib/jvm/java-8-oracle/bin/  -javacompliancelevel  4  -maxgen  500  -seed  300  -maxtime  180  -scope  package  -stopfirst  True  -flthreshold  0.1  -population  10  -srcjavafolder  source/  -srctestfolder  tests/  -binjavafolder  build/  -bintestfolder  build-tests/";
+		String argStr = "-mode jGenProg -location   "+location+" -dependencies  "+libDir
+				+"  -failing org.jfree.chart.plot.junit.PiePlot3DTests#testDrawWithNullDataset: "
+				+" -package  org.jfree  -jvm4testexecution  /usr/lib/jvm/java-8-oracle/bin/  -javacompliancelevel  4  -maxgen  500  -seed  300  -maxtime  180  -scope  package  -stopfirst  True  -flthreshold  0.1  -population  10  -srcjavafolder  source/  -srctestfolder  tests/  -binjavafolder  build/  -bintestfolder  build-tests/";
+		argStr+= " -loglevel INFO";		
+		AstorMain main1 = new AstorMain();
+		String[] args = argStr.split("\\s+");
+		System.out.println(Arrays.toString(args));
+		main1.execute(args);
+
+		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+		System.out.println("Solution count: "+solutions.size());
+	}
 	/**
 	 * The fix is a replacement of an return statement
 	 * 

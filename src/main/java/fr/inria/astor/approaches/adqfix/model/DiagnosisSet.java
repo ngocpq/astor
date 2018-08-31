@@ -71,13 +71,12 @@ public class DiagnosisSet<CompType> {
 		StringBuilder sb = new StringBuilder();
 		sb.append("DiagnosisSet: ");
 		sb.append("{");
-		if (!candidates.isEmpty()){
-			sb.append(" "+candidates.get(0).toString());
-			for(int i=1;i<this.candidates.size();i++){
-				Diagnosis<CompType> c =this.candidates.get(i);
-				sb.append(", "+ c.toString());
-			}
-		}
+		for(int i=0;i<this.candidates.size();i++){
+			Diagnosis<CompType> c =this.candidates.get(i);
+			if (i>0)
+				sb.append("\n");
+			sb.append("\t"+i+") " + c.toString());
+		}	
 		sb.append("}");
 		return sb.toString();
 	}

@@ -167,12 +167,15 @@ public abstract class AstorCoreEngine implements AstorExtensionPoint {
 			}
 
 			generationsExecuted++;
-			log.debug("\n----------Running generation/iteraction " + generationsExecuted + ", population size: "
-					+ this.variants.size());
+			log.info("\n----------Running generation: " + generationsExecuted +"/"+ConfigurationProperties.getPropertyInt("maxGeneration")
+						+ ", population size: " + this.variants.size());
+			
 			try {
 				boolean solutionFound = processGenerations(generationsExecuted);
-
-				stopSearch = solutionFound &&
+				
+				log.debug("Best variant Id: "+this.variants.get(0).getId()+", fitness: "+this.variants.get(0).getFitness());
+				
+						stopSearch = solutionFound &&
 				// one solution
 						(ConfigurationProperties.getPropertyBool("stopfirst")
 								// or nr solutions are greater than max allowed
@@ -356,6 +359,8 @@ public abstract class AstorCoreEngine implements AstorExtensionPoint {
 			if (solution) {
 				foundSolution = true;
 				newVariant.setBornDate(new Date());
+				int testExecutedCount = getCurrentStat().getCounter(GeneralStatEnum.NR_TESTCASE_EXECUTED);
+				newVariant.setBornExecutedTestCount(testExecutedCount);
 			}
 			foundOneVariant = true;
 			// Finally, reverse the changes done by the child
@@ -833,12 +838,18 @@ public abstract class AstorCoreEngine implements AstorExtensionPoint {
 	}
 
 	protected VariantValidationResult validateInstance(ProgramVariant variant) {
-
+		log.debug("begin validate: "+variant.toString());
 		VariantValidationResult validationResult = programValidator.validate(variant, projectFacade);
 		if (validationResult != null) {
+			log.debug(variant.toString()+" isSolution: "+validationResult.isSuccessful());
+			if (validationResult.isSuccessful()){				
+				long time = TimeUtil.getDateDiff(dateInitEvolution, variant.getBornDate(), TimeUnit.SECONDS);
+				log.info(variant.toString()+" isSolution: "+validationResult.isSuccessful()+" time: "+time +", #test: "+getCurrentStat().getGeneralStats().get(GeneralStatEnum.NR_TESTCASE_EXECUTED));
+			}
 			variant.setIsSolution(validationResult.isSuccessful());
 			variant.setValidationResult(validationResult);
-		}
+		}else
+			log.debug(variant.toString()+" validationResult is null");
 		return validationResult;
 	}
 

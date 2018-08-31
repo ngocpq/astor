@@ -4,6 +4,8 @@ import java.util.List;
 
 import fr.inria.astor.approaches.adqfix.model.Diagnosis;
 import fr.inria.astor.approaches.adqfix.model.DiagnosisSet;
+import fr.inria.astor.approaches.adqfix.validate.AdequateEvaluationResult;
+import fr.inria.astor.core.entities.ProgramVariant;
 //import fr.inria.astor.approaches.adqfix.model.MinimalCorrectionLocationSet;
 import fr.inria.astor.core.faultlocalization.entity.SuspiciousCode;
 //import fr.inria.astor.core.setup.ProjectRepairFacade;
@@ -15,4 +17,6 @@ public interface AdequateFixLocationStrategy<T>{
 	
 	//List<AdequateFixLocation> geneneAdequateFixes(List<SuspiciousCode> suspicious);
 	void initAdequateFixLocationStrategy(List<SuspiciousCode> suspicious, List<String> failingTestCases);
+	
+	AdequateEvaluationResult evaluateAdequate(ProgramVariant mutatedVariant);
 }

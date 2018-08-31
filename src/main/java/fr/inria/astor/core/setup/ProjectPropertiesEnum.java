@@ -16,6 +16,7 @@ public enum ProjectPropertiesEnum {
 	dependencies,
 	originalProjectRootDir,
 	dataFolder ,
+	failingTestMethods,
 	failingTestCases,
 	regressionTestCases,
 	spoonFactory,

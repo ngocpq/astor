@@ -29,8 +29,8 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 	static Logger logger = Logger.getLogger(CoverageInfoCached_GZoltarFaultLocalization.class.getName());
 
 	//IObservationMatrix observationMatrix ;
-	Map<String, Integer> mapfailingTestIndex ;
-	public Map<String, Integer> getTestCaseIdMapping(){
+	Map<String, Map<String,Integer>> mapfailingTestIndex ;
+	public Map<String, Map<String,Integer>> getTestCaseIdMapping(){
 		return this.mapfailingTestIndex;
 	}
 	
@@ -87,14 +87,14 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 			}
 
 		}
-
+		logger.info("Running Gzoltar ...");
 		gz.run();
 		int[] sum = new int[2];
 		mapfailingTestIndex = new HashMap<>();
 		int testidex = 0;
 		for (TestResult tr : gz.getTestResults()) {			
-			String testName = tr.getName().split("#")[0];
-			if (testName.startsWith("junit")) {
+			String testCaseName = tr.getName();
+			if (testCaseName.startsWith("junit")) {
 				continue;
 			}
 			sum[0]++;
@@ -102,12 +102,18 @@ public class CoverageInfoCached_GZoltarFaultLocalization extends GZoltarFaultLoc
 			if (!tr.wasSuccessful()) {
 				logger.info("Test failt: " + tr.getName());
 
-				String testCaseName = testName.split("\\#")[0];
-				if (!failingTestCases.contains(testCaseName)) {
-					failingTestCases.add(testCaseName);			
-					failingTestCasesID.add(testidex);
-					
-					mapfailingTestIndex.put(testCaseName, testidex);					
+				String testClaseName = testCaseName.split("\\#")[0];
+				if (!failingTestCases.contains(testClaseName)) {
+					failingTestCases.add(testClaseName);													
+				}
+				
+				Map<String, Integer> mapFailingTestMethods = mapfailingTestIndex.get(testClaseName);
+				if (mapFailingTestMethods==null){
+					mapFailingTestMethods=new HashMap<>();
+					mapfailingTestIndex.put(testClaseName, mapFailingTestMethods);
+				}
+				if (!mapFailingTestMethods.containsKey(testCaseName)){
+					mapFailingTestMethods.put(testCaseName, testidex);
 				}
 			}
 			testidex++;

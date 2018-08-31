@@ -47,4 +47,13 @@ public class ProgramVariant_Helper {
 		return modifiedLocs;
 	}
 
+	public static List<OperatorInstance> getChangedOperations(ProgramVariant variant) {		
+		List<OperatorInstance> operations = new ArrayList<>();
+		for(int i= variant.getLastModificationPointAnalyzed();i<=variant.getGenerationSource();i++){
+			List<OperatorInstance> lst = variant.getOperations(i);
+			if (lst!=null)
+				operations.addAll(lst);
+		}	
+		return operations;
+	}
 }

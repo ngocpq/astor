@@ -84,7 +84,7 @@ public class ProgramVariant {
 	 * Date the variant were born
 	 */
 	protected Date bornDate = new Date();
-
+	protected int bornDateByNumTestExecuted=-1;
 	/**
 	 * List that contains the classes affected by the variant, with the
 	 * corresponding changes that the variant proposes. Note that these classes
@@ -230,7 +230,15 @@ public class ProgramVariant {
 	public void setBornDate(Date bornDate) {
 		this.bornDate = bornDate;
 	}
+	
+	public int getBornExecutedTestCount() {
+		return bornDateByNumTestExecuted;
+	}
 
+	public void setBornExecutedTestCount(int testCount) {
+		this.bornDateByNumTestExecuted=testCount;
+	}
+	
 	public List<CtClass> getModifiedClasses() {
 		return modifiedClasses;
 	}

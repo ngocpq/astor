@@ -30,7 +30,7 @@ public class Stats {
 	 *
 	 */
 	public enum GeneralStatEnum {
-		TOTAL_TIME, NR_GENERATIONS, NR_RIGHT_COMPILATIONS, NR_FAILLING_COMPILATIONS, NR_FAILING_VALIDATION_PROCESS, OUTPUT_STATUS
+		TOTAL_TIME, NR_GENERATIONS, NR_RIGHT_COMPILATIONS, NR_FAILLING_COMPILATIONS, NR_FAILING_VALIDATION_PROCESS, OUTPUT_STATUS,NR_TESTCASE_EXECUTED
 	};
 
 	/**
@@ -131,6 +131,15 @@ public class Stats {
 			((Counter) v).increment();
 		}
 	}
+	public int getCounter(GeneralStatEnum type) {
+		Object v = this.generalStats.get(type);
+		if (v == null) {
+			return 0;
+		}else if (v instanceof Counter) {
+			return ((Counter) v).getCounter();
+		}else
+			return 0;
+	}
 
 	public Map<GeneralStatEnum, Object> getGeneralStats() {
 		return generalStats;
@@ -155,6 +164,9 @@ public class Stats {
 			patches.add(patch_i);
 			patch_i.addStat(PatchStatEnum.TIME,
 					TimeUtil.getDateDiff(dateInitEvolution, solutionVariant.getBornDate(), TimeUnit.SECONDS));
+			
+			patch_i.addStat(PatchStatEnum.EXECUTED_TESTS,solutionVariant.getBornExecutedTestCount());
+			
 			patch_i.addStat(PatchStatEnum.VARIANT_ID, solutionVariant.getId());
 
 			patch_i.addStat(PatchStatEnum.VALIDATION, solutionVariant.getValidationResult().toString());

@@ -191,12 +191,35 @@ public class ProjectConfiguration {
 		this.internalProperties.put(ProjectPropertiesEnum.dataFolder, dataFolder);
 	}
 
+	public List<String> getFailingTestMethods() {
+		return (List<String>) this.internalProperties.get(ProjectPropertiesEnum.failingTestMethods);
+	}
+
+	public void setFailingTestMethods(List<String> failingTestMethods) {
+		this.internalProperties.put(ProjectPropertiesEnum.failingTestMethods, failingTestMethods);
+	}
+	
 	public List<String> getFailingTestCases() {
 		return (List<String>) this.internalProperties.get(ProjectPropertiesEnum.failingTestCases);
 	}
 
 	public void setFailingTestCases(List<String> failingTestCases) {
-		this.internalProperties.put(ProjectPropertiesEnum.failingTestCases, failingTestCases);
+		this.setFailingTestMethods(failingTestCases);
+		
+		List<String> failingTests = new ArrayList();
+		List<String> failingTestMethods = new ArrayList();
+		for(String tc:failingTestCases){
+			if (!failingTestMethods.contains(tc))
+				failingTestMethods.add(tc);
+				
+			String[] split = tc.split("#");
+			if (!failingTests.contains(split[0]))
+				failingTests.add(split[0]);
+		}
+		
+		this.internalProperties.put(ProjectPropertiesEnum.failingTestCases, failingTests);
+		
+		this.setFailingTestMethods(failingTestMethods);
 	}
 
 	public List<String> getRegressionTestCases() {

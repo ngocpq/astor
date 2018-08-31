@@ -76,6 +76,8 @@ public class ProcessValidator extends ProgramVariantValidator {
 				log.debug("**The validation 1 have not finished well**");
 				return null;
 			}
+			for(int i=0;i<trfailing.casesExecuted;i++)
+				currentStats.increment(GeneralStatEnum.NR_TESTCASE_EXECUTED);
 
 			log.debug(trfailing);
 			if (trfailing.wasSuccessful() || forceExecuteRegression) {
@@ -193,6 +195,8 @@ public class ProcessValidator extends ProgramVariantValidator {
 			return null;
 		} else {
 			log.debug(trregression);
+			for(int i=0;i<trregression.casesExecuted;i++)
+				currentStats.increment(GeneralStatEnum.NR_TESTCASE_EXECUTED);
 			return new TestCasesProgramValidationResult(trregression, trregression.wasSuccessful(),
 					(trregression != null));
 		}
@@ -217,6 +221,8 @@ public class ProcessValidator extends ProgramVariantValidator {
 				log.debug("The validation 2 have not finished well");
 				return null;
 			} else {
+				for(int i=0;i<singleTestResult.casesExecuted;i++)
+					currentStats.increment(GeneralStatEnum.NR_TESTCASE_EXECUTED);
 				trregressionall.getFailures().addAll(singleTestResult.getFailures());
 				trregressionall.getSuccessTest().addAll(singleTestResult.getSuccessTest());
 				trregressionall.failures += singleTestResult.failures;

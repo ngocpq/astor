@@ -118,9 +118,9 @@ public class LaucherJUnitProcess {
 			//
 			p.waitFor(waitTime, TimeUnit.MILLISECONDS);
 			long t_end = System.currentTimeMillis();
-			// log.debug("Execution time " + ((t_end - t_start) / 1000) + "
-			// seconds");
-
+			log.debug("Execution time " + ((t_end - t_start) / 1000) + "seconds");
+			log.debug("process is alive: "+p.isAlive());
+			
 			if (!avoidInterruption) {
 				// We force obtaining the exit value.
 				p.exitValue();
