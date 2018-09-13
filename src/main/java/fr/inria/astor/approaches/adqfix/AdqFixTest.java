@@ -29,10 +29,12 @@ public class AdqFixTest {
 
 	public static void main(String[] args) throws Exception {
 		AdqFixTest app = new AdqFixTest();
+		app.testMath74();
+		//app.testMath76();
 		//app.testMath85();
 		//app.testMath50Remove();
 		//app.testTime_27_AdqFix();
-		app.testChart_15_AdqFix();
+		//app.testChart_15_AdqFix();
 		//app.testChart_15_Genprog();
 		//app.testChart_14_AdqFix();
 		//app.testChart_25_AdqFix();
@@ -191,7 +193,7 @@ public class AdqFixTest {
 				new File("./examples/math_85").getAbsolutePath(), "-package", "org.apache.commons", "-srcjavafolder",
 				"/src/java/", "-srctestfolder", "/src/test/", "-binjavafolder", "/target/classes", "-bintestfolder",
 				"/target/test-classes", "-javacompliancelevel", "7", "-flthreshold", "0.5", "-stopfirst", "true",
-				"-maxgen", "400", "-scope", "package", "-seed", "10", "-loglevel", "INFO" };
+				"-maxgen", "400", "-scope", "package", "-seed", "10", "-loglevel", "FINER" };
 		System.out.println(Arrays.toString(args));
 		main1.execute(args);
 

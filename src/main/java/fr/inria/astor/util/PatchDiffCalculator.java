@@ -67,7 +67,7 @@ public class PatchDiffCalculator {
 
 		try {
 			String line = "";
-			ProcessBuilder builder = new ProcessBuilder("/bin/bash");
+			ProcessBuilder builder = OsUtils.getBashProcessBuilder();
 			builder.redirectErrorStream(true);
 
 			Process process = builder.start();

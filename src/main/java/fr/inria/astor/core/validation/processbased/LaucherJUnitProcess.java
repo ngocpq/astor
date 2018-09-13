@@ -19,6 +19,7 @@ import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.validation.junit.JUnitExternalExecutor;
 import fr.inria.astor.core.validation.junit.JUnitNologExternalExecutor;
 import fr.inria.astor.core.validation.results.TestResult;
+import fr.inria.astor.util.OsUtils;
 
 /**
  * Lauches a process and parses its output.
@@ -44,17 +45,21 @@ public class LaucherJUnitProcess {
 		return execute(jvmPath, urlArrayToString(classpath), classesToExecute, waitTime);
 	}
 
-	boolean outputInFile = ConfigurationProperties.getPropertyBool("processoutputinfile");
-
+	boolean outputInFile = ConfigurationProperties.getPropertyBool("processoutputinfile");	
+	
 	public TestResult execute(String jvmPath, String classpath, List<String> classesToExecute, int waitTime) {
 		Process p = null;
 		jvmPath += File.separator + "java";
+		if (!jvmPath.trim().startsWith("\""))
+			jvmPath = "\""+jvmPath.trim();
+		if (!jvmPath.trim().endsWith("\""))
+			jvmPath = jvmPath.trim()+"\"";
 
 		List<String> cls = new ArrayList<>(classesToExecute);
 
 		String newClasspath = classpath;
 		if(ConfigurationProperties.getPropertyBool("runexternalvalidator")){
-			newClasspath = (new File(ConfigurationProperties.getProperty("executorjar")).getAbsolutePath()) 
+			newClasspath = "\""+(new File(ConfigurationProperties.getProperty("executorjar")).getAbsolutePath()) +"\"" 
 					+ File.pathSeparator 
 					+ classpath;
 		}
@@ -75,7 +80,7 @@ public class LaucherJUnitProcess {
 
 			printCommandToExecute(command);
 
-			ProcessBuilder pb = new ProcessBuilder("/bin/bash");
+			ProcessBuilder pb = OsUtils.getBashProcessBuilder();
 
 			if (outputInFile) {
 				pb.redirectOutput(ftemp);
