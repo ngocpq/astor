@@ -38,7 +38,7 @@ public class JGenProg extends IngredientBasedRepairApproachImpl {
 		}
 	}
 
-	private void applyCrossover(int generation) {
+	protected void applyCrossover(int generation) {
 		int numberVariants = this.variants.size();
 		if (numberVariants <= 1) {
 			log.debug("CO|Not Enough variants to apply Crossover");

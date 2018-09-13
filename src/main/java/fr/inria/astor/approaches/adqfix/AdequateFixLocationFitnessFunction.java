@@ -31,7 +31,7 @@ public class AdequateFixLocationFitnessFunction extends TestCaseFitnessFunction{
 			originalScore = super.calculateFitnessValue(rs.getTestCaseValuation(), variant);				
 		}
 		
-		double adequateModifyScore= 0 ;//computeAdequateModificationScore(variant);
+		double adequateModifyScore= 0 ;//computeAdequateModificationScore(variant); //TODO: note that, -1 < adequateModifyScore < 1
 		
 		//new fitness result
 		return (1-adqWeight)*originalScore +adqWeight*adequateModifyScore;		
